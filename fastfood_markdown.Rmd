@@ -1,0 +1,75 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+install.packages("openintro")
+suppressPackageStartupMessages(library(openintro))
+suppressPackageStartupMessages(library(tidyverse))
+
+```
+#prelim
+```{r}
+fastfood <- openintro::fastfood
+fastfood
+```
+#Q1 Looking only at Burger King and Chick-Fil-A, which item has the highest calories?  The answer should be saved as Q1.
+```{r}
+Q1<- fastfood %>% 
+  filter(restaurant == 'Burger King' | restaurant == 'Chick Fil-A') %>% 
+  arrange(desc(calories)) %>% 
+  select(item) %>% 
+  head(1)
+
+Q1
+```
+#Q2 What is the mean sugar amount for all items from Subway?
+```{r}
+Q2<- fastfood %>% 
+  filter(restaurant == 'Subway') %>% 
+  summarise(mean_sugar = mean(sugar)) %>% 
+  as.data.frame()
+
+Q2
+```
+
+#Q3 What is the mean value of calories for all items from Taco Bell?
+```{r}
+Q3<- fastfood %>% 
+  filter(restaurant == 'Taco Bell') %>% 
+  summarise(mean_cal = mean(calories)) %>% 
+  as.data.frame()
+
+Q3
+```
+
+#Q4 Create a variable equal to total_fat x sugar called fatXsugar.  Produce a tibble that has the restaurant, item, and fatXsugar for the top 3 items, from highest to lowest.
+```{r}
+Q4<- fastfood %>% 
+  mutate(fatXsugar=total_fat*sugar) %>%  
+  arrange(desc(fatXsugar)) %>% 
+  select(restaurant, item, fatXsugar) %>% 
+  head(3)
+
+Q4
+
+
+```
+
+#Q5 How many restaurants have an average saturated fat over 10?
+```{r}
+Q5<- fastfood %>% 
+  group_by(restaurant) %>% 
+  summarise(avg_sat_fat= mean(sat_fat)) %>% 
+  filter(avg_sat_fat>10) %>% 
+  summarise(num_rest=n())
+Q5
+
+
+```
+
+
+
+
+

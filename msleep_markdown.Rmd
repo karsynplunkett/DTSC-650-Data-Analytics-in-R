@@ -1,0 +1,66 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+suppressPackageStartupMessages(library(tidyverse))
+
+```
+#prelim
+```{r}
+msleep
+```
+#Q1 What is the variance in total sleep for carni vores and those whose conservation status is lc?
+```{r}
+Q1<- msleep %>% 
+  filter(vore == 'carni' & conservation == 'lc') %>% 
+  summarise(var= var(sleep_total)) %>% 
+  as.data.frame()
+
+Q1
+```
+#Q2 What rodent (order Rodentia) has the highest total sleep/rem sleep ratio?  
+```{r}
+Q2<- msleep %>% 
+  filter(order == 'Rodentia') %>% 
+  mutate(ratio = sleep_total/sleep_rem) %>% 
+  arrange(desc(ratio)) %>% 
+  select(name) %>% 
+  head(1)
+Q2
+
+```
+#Q3 How many primates have a bodyweight/brainwt ratio greater than 100?  
+```{r}
+Q3<- msleep %>% 
+  mutate(ratio = bodywt/brainwt) %>% 
+  filter(order == 'Primates' & ratio >100) %>% 
+  summarise(count=n()) %>% 
+  as.data.frame()
+
+Q3
+  
+```
+#Q4 Create two new variables, the mean of sleep total and variance of sleep total, grouped by conservation, and removing missing values
+```{r}
+Q4<- msleep %>%
+  filter(is.na(conservation)==FALSE) %>%   
+  group_by(conservation) %>% 
+  summarise(mean_sleep=round(mean(sleep_total),2), var_sleep=round(var(sleep_total),2)) %>% 
+  as.data.frame()
+
+
+Q4
+```
+#Q5 Provide the name(s) of all the domesticated herbivores that sleep more than 12 hours.
+```{r}
+Q5<-msleep %>% 
+  filter(vore=='herbi' & sleep_total>12 & conservation == 'domesticated') %>% 
+  select(name) %>% 
+  as.data.frame()
+Q5
+
+```
+
+
